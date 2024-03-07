@@ -27,20 +27,57 @@ namespace Problem
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
-            float temp;
-            for(int i  = 0; i < N; i++)
-            {   
-                for (int j = 0; j < N - 1 - i; j++)
+            QuickSort(arr, 0, N - 1);
+            return arr;
+        }
+
+        static private void QuickSort(float[] arr, int first, int last)
+        {
+            if (first < last)
+            {
+                int split = Partition(arr, first, last);
+
+                QuickSort(arr, first, split - 1);
+                QuickSort(arr, split + 1, last);
+
+            }
+        }
+
+        static private int Partition(float[] arr, int first, int last)
+        {
+            float pivot = arr[first];
+            int leftMark = first + 1;
+            int rightMark = last;
+            bool done = false;
+
+            while (!done)
+            {
+                while (leftMark <= rightMark && arr[leftMark] <= pivot)
                 {
-                    if (arr[j] > arr[j+1])
-                    {
-                        temp = arr[j];
-                        arr[j] = arr[j+1];
-                        arr[j+1] = temp;
-                    }
+                    leftMark++;
+                }
+
+                while (arr[rightMark] >= pivot && rightMark >= leftMark)
+                {
+                    rightMark--;
+                }
+
+                if (rightMark < leftMark) 
+                { 
+                    done = true;
+                }
+                else
+                {
+                    float temp1 = arr[leftMark];
+                    arr[leftMark] = arr[rightMark];
+                    arr[rightMark] = temp1;
                 }
             }
-            return arr;
+            float temp = arr[first];
+            arr[first] = arr[rightMark];
+            arr[rightMark] = temp;
+
+            return rightMark;
         }
         #endregion
     }
