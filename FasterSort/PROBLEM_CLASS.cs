@@ -42,11 +42,11 @@ namespace Problem
 
         static private void IntrosortRecursive(float[] arr, int first, int last, int maxDepth)
         {
-            while (last - first > 50)
+            while (last - first > 20)
             {
                 if (maxDepth == 0)
                 {
-                    Heapsort(arr, first, last);
+                    Heapsort(arr, first, last,20);
                     return;
                 }
 
@@ -105,9 +105,8 @@ namespace Problem
         }
 
 
-        static private void Heapsort(float[] arr, int first, int last)
+        static private void Heapsort(float[] arr, int first, int last, int heapSize)
         {
-            int heapSize = last - first + 1;
             BuildMaxHeap(arr, first, heapSize);
             for (int i = arr.Length - 1; i > 0; i--)
             {
@@ -163,9 +162,7 @@ namespace Problem
                 }
             }
 
-            float temp = arr[first];
-            arr[first] = arr[rightMark];
-            arr[rightMark] = temp;
+            
 
             return rightMark;
         }
@@ -186,6 +183,8 @@ namespace Problem
                 }
             }
         }
+
+
         #endregion
     }
 }
