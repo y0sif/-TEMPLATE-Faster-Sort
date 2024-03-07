@@ -28,9 +28,36 @@ namespace Problem
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
-            Heapsort(arr);
+            Introsort(arr);
             
             return arr;
+        }
+
+        static private void Introsort(float[] arr)
+        {
+            int maxDepth = (int)Math.Floor(2 * Math.Log(arr.Length) / Math.Log(2));
+            IntrosortRecursive(arr, 0, arr.Length - 1, maxDepth);
+            InsertionSort(arr);
+        }
+
+        static private void IntrosortRecursive(float[] arr, int first, int last, int maxDepth)
+        {
+            while (last - first > 50)
+            {
+                if (maxDepth == 0)
+                {
+                    Heapsort(arr, first, last);
+                    return;
+                }
+
+                int pivotIndex = Partition(arr, first, last);
+                maxDepth--;
+
+                if (pivotIndex - 1 > first)
+                    IntrosortRecursive(arr, first, pivotIndex - 1, maxDepth);
+
+                first = pivotIndex + 1;
+            }
         }
 
         static private int Left(int n)
@@ -66,26 +93,97 @@ namespace Problem
             }
         }
 
-        static private int BuildMaxHeap(float[] arr)
+        static private int BuildMaxHeap(float[] arr, int first, int heapSize)
         {
-            int heapSize = arr.Length;
-            int i = arr.Length / 2;
-            for ( ; i >= 0; i--)
+            int hp = first + heapSize / 2 -1;
+            int i = hp;
+            for ( ; i >= first; i--)
             {
                 MaxHeapify(arr, i, heapSize);
             }
-            return heapSize;
+            return hp;
         }
 
 
-        static private void Heapsort(float[] arr)
+        static private void Heapsort(float[] arr, int first, int last)
         {
-            int heapSize = BuildMaxHeap(arr);
+            int heapSize = last - first + 1;
+            BuildMaxHeap(arr, first, heapSize);
             for (int i = arr.Length - 1; i > 0; i--)
             {
                 (arr[0], arr[i]) = (arr[i], arr[0]);
                 heapSize--;
                 MaxHeapify(arr, 0, heapSize);
+            }
+        }
+
+        static private void QuickSort(float[] arr, int first, int last)
+        {
+            if (first < last)
+            {
+                int split = Partition(arr, first, last);
+
+                QuickSort(arr, first, split - 1);
+                QuickSort(arr, split + 1, last);
+
+            }
+        }
+
+        static private int Partition(float[] arr, int first, int last)
+        {
+            Random r = new Random();
+            int randStart = r.Next(first, last);
+            float pivot = arr[randStart];
+            arr[randStart] = arr[first];
+            arr[first] = pivot;
+            int leftMark = first + 1;
+            int rightMark = last;
+
+            while (true)
+            {
+                while (leftMark <= rightMark && arr[leftMark] <= pivot)
+                {
+                    leftMark++;
+                }
+
+                while (rightMark >= leftMark && arr[rightMark] >= pivot)
+                {
+                    rightMark--;
+                }
+
+                if (rightMark < leftMark)
+                {
+                    break;
+                }
+                else
+                {
+                    float temp1 = arr[leftMark];
+                    arr[leftMark] = arr[rightMark];
+                    arr[rightMark] = temp1;
+                }
+            }
+
+            float temp = arr[first];
+            arr[first] = arr[rightMark];
+            arr[rightMark] = temp;
+
+            return rightMark;
+        }
+
+        static private void InsertionSort(float[] arr)
+        {
+            float temp;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                for (int j = i; j < arr.Length; j++)
+                {
+                    if (arr[i] > arr[j])
+                    {
+                        temp = arr[j];
+                        arr[j] = arr[i];
+                        arr[i] = temp;
+                    }
+                }
             }
         }
         #endregion
