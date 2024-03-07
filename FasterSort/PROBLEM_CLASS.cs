@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,20 +28,65 @@ namespace Problem
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
-            float temp;
-            for(int i  = 0; i < N; i++)
-            {   
-                for (int j = 0; j < N - 1 - i; j++)
-                {
-                    if (arr[j] > arr[j+1])
-                    {
-                        temp = arr[j];
-                        arr[j] = arr[j+1];
-                        arr[j+1] = temp;
-                    }
-                }
-            }
+            Heapsort(arr);
+            
             return arr;
+        }
+
+        static private int Left(int n)
+        {
+            return 2 * n + 1;
+        }
+
+        static private int Right(int n)
+        {
+            return 2 * n + 2;
+        }
+        static private void MaxHeapify(float[] arr, int index, int heapSize)
+        {
+            int left = Left(index);
+            int right = Right(index);
+            int largest;
+            if (left < heapSize && arr[left] > arr[index])
+            {
+                largest = left;
+            }
+            else
+            {
+                largest = index;
+            }
+            if (right < heapSize && arr[right] > arr[largest])
+            {
+                largest = right;
+            }
+            if (largest != index)
+            {
+                (arr[index], arr[largest]) = (arr[largest], arr[index]);
+                MaxHeapify(arr, largest, heapSize);
+            }
+        }
+
+        static private int BuildMaxHeap(float[] arr)
+        {
+            int heapSize = arr.Length;
+            int i = arr.Length / 2;
+            for ( ; i > 0; i--)
+            {
+                MaxHeapify(arr, i, heapSize);
+            }
+            return heapSize;
+        }
+
+
+        static private void Heapsort(float[] arr)
+        {
+            int heapSize = BuildMaxHeap(arr);
+            for (int i = arr.Length - 1; i > 0; i--)
+            {
+                (arr[0], arr[i]) = (arr[i], arr[0]);
+                heapSize--;
+                MaxHeapify(arr, 0, heapSize);
+            }
         }
         #endregion
     }
