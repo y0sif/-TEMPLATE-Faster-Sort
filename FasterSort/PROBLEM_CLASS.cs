@@ -70,7 +70,7 @@ namespace Problem
         {
             int heapSize = arr.Length;
             int i = arr.Length / 2;
-            for ( ; i > 0; i--)
+            for ( ; i >= 0; i--)
             {
                 MaxHeapify(arr, i, heapSize);
             }
