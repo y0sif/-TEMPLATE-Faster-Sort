@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -30,13 +31,18 @@ namespace Problem
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
+            Stopwatch sw = null;
+            sw = Stopwatch.StartNew();
             MergeSort(arr, 0, N-1);
+            sw.Stop();
+            Console.WriteLine("time of merge: " + sw.ElapsedMilliseconds);
             return arr;
         }
         #endregion
 
         static private void MergeSort(float[] arr, int start, int end)
         {
+            
             if (start < end)
             {
                 int mid = (start + end) / 2;
@@ -49,8 +55,29 @@ namespace Problem
                 {
                     MergeSort(arr, mid + 1, end);
                 });
-                Merge(arr, start, mid, end);
+                if (end - start < 50)
+                {
+                    float temp;
+                    for (int i = start; i <= end; i++)
+                    {
+                        for (int j = i; j <= end; j++)
+                        {
+                            if (arr[i] > arr[j])
+                            {
+                                temp = arr[j];
+                                arr[j] = arr[i];
+                                arr[i] = temp;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Merge(arr, start, mid, end);
+                }
+                
             }
+            
         }
 
         static private void Merge(float[] arr, int start, int mid, int end)
@@ -62,7 +89,6 @@ namespace Problem
 
             for (int e = 0; e < n1; e++)
                 arr1[e] = arr[start + e];
-            
 
             int i = 0;
             int j = 0;
@@ -71,14 +97,14 @@ namespace Problem
             {
                 if (i < n1 && j < n2)
                 {
-                    if (arr1[i] <= arr[j + mid+1])
+                    if (arr1[i] <= arr[j + mid + 1])
                     {
                         arr[k] = arr1[i];
                         i++;
                     }
                     else
                     {
-                        arr[k] = arr[j + mid+1];
+                        arr[k] = arr[j + mid + 1];
                         j++;
                     }
                 }
