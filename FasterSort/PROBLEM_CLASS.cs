@@ -27,6 +27,8 @@ namespace Problem
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
+            Random r = new Random();
+            arr.OrderBy(x => r.Next()).ToArray();
             QuickSort(arr, 0, N - 1);
             return arr;
         }
@@ -45,26 +47,29 @@ namespace Problem
 
         static private int Partition(float[] arr, int first, int last)
         {
-            float pivot = arr[first];
+            Random r = new Random();
+            int randStart = r.Next(first, last);
+            float pivot = arr[randStart];
+            arr[randStart] = arr[first];
+            arr[first] = pivot;
             int leftMark = first + 1;
             int rightMark = last;
-            bool done = false;
 
-            while (!done)
+            while (true)
             {
                 while (leftMark <= rightMark && arr[leftMark] <= pivot)
                 {
                     leftMark++;
                 }
 
-                while (arr[rightMark] >= pivot && rightMark >= leftMark)
+                while (rightMark >= leftMark && arr[rightMark] >= pivot)
                 {
                     rightMark--;
                 }
 
                 if (rightMark < leftMark) 
-                { 
-                    done = true;
+                {
+                    break;
                 }
                 else
                 {
@@ -73,6 +78,7 @@ namespace Problem
                     arr[rightMark] = temp1;
                 }
             }
+
             float temp = arr[first];
             arr[first] = arr[rightMark];
             arr[rightMark] = temp;
