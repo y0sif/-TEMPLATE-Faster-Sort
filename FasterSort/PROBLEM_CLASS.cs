@@ -59,19 +59,10 @@ namespace Problem
             int n2 = end - mid;
 
             float[] arr1 = new float[n1];
-            float[] arr2 = new float[n2];
 
-            Parallel.Invoke(
-            () =>
-            {
-                for (int e = 0; e < n1; e++)
-                    arr1[e] = arr[start + e];
-            },
-            () =>
-            {
-                for (int e = 0; e < n2; e++)
-                    arr2[e] = arr[mid + 1 + e];
-            });
+            for (int e = 0; e < n1; e++)
+                arr1[e] = arr[start + e];
+            
 
             int i = 0;
             int j = 0;
@@ -80,14 +71,14 @@ namespace Problem
             {
                 if (i < n1 && j < n2)
                 {
-                    if (arr1[i] <= arr2[j])
+                    if (arr1[i] <= arr[j + mid+1])
                     {
                         arr[k] = arr1[i];
                         i++;
                     }
                     else
                     {
-                        arr[k] = arr2[j];
+                        arr[k] = arr[j + mid+1];
                         j++;
                     }
                 }
@@ -106,7 +97,7 @@ namespace Problem
 
             while (j < n2)
             {
-                arr[k] = arr2[j];
+                arr[k] = arr[j + mid + 1];
                 k++;
                 j++;
             }
