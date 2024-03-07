@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Problem
@@ -39,8 +40,15 @@ namespace Problem
             if (start < end)
             {
                 int mid = (start + end) / 2;
-                MergeSort(arr, start, mid);
-                MergeSort(arr, mid+1, end);
+                Parallel.Invoke(
+                () =>
+                {
+                    MergeSort(arr, start, mid);
+                },
+                () =>
+                {
+                    MergeSort(arr, mid + 1, end);
+                });
                 Merge(arr, start, mid, end);
             }
         }
@@ -53,11 +61,17 @@ namespace Problem
             float[] arr1 = new float[n1];
             float[] arr2 = new float[n2];
 
-            for (int e = 0; e < n1; e++)
-                arr1[e] = arr[start + e];
-
-            for (int e = 0; e < n2; e++)
-                arr2[e] = arr[mid + 1 + e];
+            Parallel.Invoke(
+            () =>
+            {
+                for (int e = 0; e < n1; e++)
+                    arr1[e] = arr[start + e];
+            },
+            () =>
+            {
+                for (int e = 0; e < n2; e++)
+                    arr2[e] = arr[mid + 1 + e];
+            });
 
             int i = 0;
             int j = 0;
