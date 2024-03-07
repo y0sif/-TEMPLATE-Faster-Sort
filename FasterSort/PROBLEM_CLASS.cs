@@ -38,9 +38,28 @@ namespace Problem
             if (first < last)
             {
                 int split = Partition(arr, first, last);
-
-                QuickSort(arr, first, split - 1);
-                QuickSort(arr, split + 1, last);
+                if(last - first > 20)
+                {
+                    QuickSort(arr, first, split - 1);
+                    QuickSort(arr, split + 1, last);
+                }
+                else
+                {
+                    float temp;
+                    for (int i = first; i <= last; i++)
+                    {
+                        for(int j = i; j <= last; j++)
+                        {
+                            if (arr[i] > arr[j])
+                            {
+                                temp = arr[i];
+                                arr[i] = arr[j];
+                                arr[j] = temp;
+                            }
+                        }
+                    }
+                }
+                
 
             }
         }
