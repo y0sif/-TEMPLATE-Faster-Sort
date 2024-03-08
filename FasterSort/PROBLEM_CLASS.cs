@@ -33,19 +33,10 @@ namespace Problem
             return arr;
         }
 
-        static private int Left(int n)
-        {
-            return 2 * n + 1;
-        }
-
-        static private int Right(int n)
-        {
-            return 2 * n + 2;
-        }
         static private void MaxHeapify(float[] arr, int index, int heapSize)
         {
-            int left = Left(index);
-            int right = Right(index);
+            int left = 2 * index + 1;
+            int right = 2 * index + 2;
             int largest;
             if (left < heapSize && arr[left] > arr[index])
             {
@@ -61,7 +52,9 @@ namespace Problem
             }
             if (largest != index)
             {
-                (arr[index], arr[largest]) = (arr[largest], arr[index]);
+                float temp = arr[index];
+                arr[index] = arr[largest];
+                arr[largest] = temp;
                 MaxHeapify(arr, largest, heapSize);
             }
         }
@@ -69,8 +62,8 @@ namespace Problem
         static private int BuildMaxHeap(float[] arr)
         {
             int heapSize = arr.Length;
-            int i = arr.Length / 2;
-            for ( ; i > 0; i--)
+            int i = arr.Length / 2 - 1;
+            for ( ; i >= 0; i--)
             {
                 MaxHeapify(arr, i, heapSize);
             }
@@ -81,9 +74,12 @@ namespace Problem
         static private void Heapsort(float[] arr)
         {
             int heapSize = BuildMaxHeap(arr);
+            float temp;
             for (int i = arr.Length - 1; i > 0; i--)
             {
-                (arr[0], arr[i]) = (arr[i], arr[0]);
+                temp = arr[i];
+                arr[i] = arr[0];
+                arr[0] = temp;
                 heapSize--;
                 MaxHeapify(arr, 0, heapSize);
             }
