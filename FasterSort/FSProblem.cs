@@ -138,7 +138,6 @@ namespace Problem
                             for (int x = 0; x < numOfRep; x++)
                             {
                                 output = PROBLEM_CLASS.RequiredFuntion(arr, N);
-                           
                             }
                             //output = sum / numOfRep;
                             sw.Stop();

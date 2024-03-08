@@ -31,11 +31,7 @@ namespace Problem
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
-            Stopwatch sw = null;
-            sw = Stopwatch.StartNew();
             MergeSort(arr, 0, N-1);
-            sw.Stop();
-            Console.WriteLine("time of merge: " + sw.ElapsedMilliseconds);
             return arr;
         }
         #endregion
