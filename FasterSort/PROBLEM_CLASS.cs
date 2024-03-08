@@ -33,7 +33,16 @@ namespace Problem
         //28 is best with 5 out of 10
         //30 is best with 6 out of 10
         //46 is best with 7 out of 10
-        private const int ParallelThreshold = 46;
+        //70 is best with 8 out of 10
+        //80 is best with 9 out of 10
+        private const int ParallelThreshold = 80;
+
+        /// <summary>
+        /// A quicksort algorithm with parallelism and insertion sort
+        /// </summary>
+        /// <param name="arr"> array to be sorted in ascending order </param>
+        /// <param name="first"> index of first element </param>
+        /// <param name="last"> index of last element </param>
         static private void QuickSort(float[] arr, int first, int last)
         {
             if (first < last)
@@ -69,7 +78,14 @@ namespace Problem
 
             }
         }
-
+        /// <summary>
+        /// The divide side of the quicksort algorithm
+        /// </summary>
+        /// <param name="arr"> array to be sorted in ascending order </param>
+        /// <param name="first"> index of first element </param>
+        /// <param name="last"> index of last element </param>
+        /// <returns> next splitting index </returns> 
+        
         static private int Partition(float[] arr, int first, int last)
         {
             // the use of median of three is better than the randomized and the fixed pivot at first element
@@ -84,23 +100,17 @@ namespace Problem
             float pivot;
             if (f > m)
             {
-                pivot = arr[first];
-                arr[first] = arr[middle];
-                arr[middle] = pivot;
+                (arr[middle], arr[first]) = (arr[first], arr[middle]);
             }
 
             if (f > l)
             {
-                pivot = arr[first];
-                arr[first] = arr[last];
-                arr[last] = pivot;
+                (arr[first], arr[last]) = (arr[last], arr[first]);
             }
 
             if (m > l)
             {
-                pivot = arr[middle];
-                arr[middle] = arr[last];
-                arr[last] = pivot;
+                (arr[middle], arr[last]) = (arr[last], arr[middle]);
             }
 
             pivot = arr[middle];
@@ -109,7 +119,7 @@ namespace Problem
             int leftMark = first + 1;
             int rightMark = last;
 
-            while (true)
+            while (leftMark <= rightMark)
             {
 
                 while (leftMark <= rightMark && arr[leftMark] <= pivot)
@@ -122,22 +132,14 @@ namespace Problem
                     rightMark--;
                 }
 
-                if (rightMark < leftMark) 
+                if (leftMark <= rightMark) 
                 {
-                    break;
-                }
-                else
-                {
-                    float temp1 = arr[leftMark];
-                    arr[leftMark] = arr[rightMark];
-                    arr[rightMark] = temp1;
+                    (arr[rightMark], arr[leftMark]) = (arr[leftMark], arr[rightMark]);
                 }
             }
 
             // use pivot for swapping rather than making temp floats
-            pivot = arr[first];
-            arr[first] = arr[rightMark];
-            arr[rightMark] = pivot;
+            (arr[first], arr[rightMark]) = (arr[rightMark], arr[first]);
 
             return rightMark;
         }
