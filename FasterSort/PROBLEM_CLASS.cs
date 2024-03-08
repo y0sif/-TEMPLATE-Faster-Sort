@@ -27,8 +27,6 @@ namespace Problem
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
-            Random r = new Random();
-            arr.OrderBy(x => r.Next()).ToArray();
             QuickSort(arr, 0, N - 1);
             return arr;
         }
@@ -40,8 +38,11 @@ namespace Problem
                 int split = Partition(arr, first, last);
                 if(last - first > 20)
                 {
-                    QuickSort(arr, first, split - 1);
-                    QuickSort(arr, split + 1, last);
+                    Parallel.Invoke(
+                    () => QuickSort(arr, first, split - 1),
+                    () => QuickSort(arr, split + 1, last)
+                    );
+                    
                 }
                 else
                 {
@@ -76,6 +77,7 @@ namespace Problem
 
             while (true)
             {
+
                 while (leftMark <= rightMark && arr[leftMark] <= pivot)
                 {
                     leftMark++;
