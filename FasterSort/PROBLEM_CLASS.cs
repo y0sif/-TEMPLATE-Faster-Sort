@@ -30,34 +30,39 @@ namespace Problem
             QuickSort(arr, 0, N - 1);
             return arr;
         }
-
+        //28 is best with 5 out of 10
+        //30 is best with 6 out of 10
+        //46 is best with 7 out of 10
+        private const int ParallelThreshold = 46;
         static private void QuickSort(float[] arr, int first, int last)
         {
             if (first < last)
             {
                 int split = Partition(arr, first, last);
-                if(last - first > 20)
+                if(last - first > ParallelThreshold)
                 {
                     Parallel.Invoke(
                     () => QuickSort(arr, first, split - 1),
                     () => QuickSort(arr, split + 1, last)
                     );
-                    
+
                 }
                 else
                 {
-                    float temp;
-                    for (int i = first; i <= last; i++)
+                    float key;
+                    int j;
+                    for (int i = first + 1; i <= last; i++)
                     {
-                        for(int j = i; j <= last; j++)
+                        key = arr[i];
+                        j = i - 1;
+
+                        while (j >= first && arr[j] > key)
                         {
-                            if (arr[i] > arr[j])
-                            {
-                                temp = arr[i];
-                                arr[i] = arr[j];
-                                arr[j] = temp;
-                            }
+                            arr[j + 1] = arr[j];
+                            j--;
                         }
+
+                        arr[j + 1] = key;
                     }
                 }
                 
@@ -67,10 +72,39 @@ namespace Problem
 
         static private int Partition(float[] arr, int first, int last)
         {
-            Random r = new Random();
-            int randStart = r.Next(first, last);
-            float pivot = arr[randStart];
-            arr[randStart] = arr[first];
+            // the use of median of three is better than the randomized and the fixed pivot at first element
+            int middle = (first + last) / 2;
+
+            //use these floats for less array access time
+            float f = arr[first];
+            float l = arr[last];
+            float m = arr[middle];
+
+            // use pivot for swapping rather than making temp floats
+            float pivot;
+            if (f > m)
+            {
+                pivot = arr[first];
+                arr[first] = arr[middle];
+                arr[middle] = pivot;
+            }
+
+            if (f > l)
+            {
+                pivot = arr[first];
+                arr[first] = arr[last];
+                arr[last] = pivot;
+            }
+
+            if (m > l)
+            {
+                pivot = arr[middle];
+                arr[middle] = arr[last];
+                arr[last] = pivot;
+            }
+
+            pivot = arr[middle];
+            arr[middle] = arr[first];
             arr[first] = pivot;
             int leftMark = first + 1;
             int rightMark = last;
@@ -100,12 +134,15 @@ namespace Problem
                 }
             }
 
-            float temp = arr[first];
+            // use pivot for swapping rather than making temp floats
+            pivot = arr[first];
             arr[first] = arr[rightMark];
-            arr[rightMark] = temp;
+            arr[rightMark] = pivot;
 
             return rightMark;
         }
+
+
         #endregion
     }
 }
