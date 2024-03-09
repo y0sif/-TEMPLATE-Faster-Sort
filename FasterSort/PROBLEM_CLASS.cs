@@ -28,21 +28,35 @@ namespace Problem
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
-            Introsort(arr);
+            Introsort(arr, N);
             
             return arr;
         }
 
-        static private void Introsort(float[] arr)
+        static private void Introsort(float[] arr, int N)
         {
-            int maxDepth = (int)Math.Floor(2 * Math.Log(arr.Length) / Math.Log(2));
+            int maxDepth = 200;
             IntrosortRecursive(arr, 0, arr.Length - 1, maxDepth);
-            InsertionSort(arr);
+            float key;
+            int j;
+            for (int i = 1; i <= N-1; i++)
+            {
+                key = arr[i];
+                j = i - 1;
+
+                while (j >= 0 && arr[j] > key)
+                {
+                    arr[j + 1] = arr[j];
+                    j--;
+                }
+
+                arr[j + 1] = key;
+            }
         }
 
         static private void IntrosortRecursive(float[] arr, int first, int last, int maxDepth)
         {
-            while (last - first > 20)
+            while (last - first > 170)
             {
                 if (maxDepth == 0)
                 {
@@ -130,16 +144,28 @@ namespace Problem
 
         static private int Partition(float[] arr, int first, int last)
         {
-            Random r = new Random();
-            int randStart = r.Next(first, last);
-            float pivot = arr[randStart];
-            arr[randStart] = arr[first];
+            // after testing, the use of median of three is better than the randomized and the fixed pivot at first element
+            int middle = (first + last) / 2;
+
+            // the idea is that you check for the lowest between first, middle and last and make it go to the right, but that needs condition checking and array accessing or creating a variable for that access
+            // instead we can remove all of that and swap them without checking, which adds some sort of randomization, but without using Random class, which makes the algorithm so much faster
+            // making the swaps using tuples is faster than traditional swapping for some reason, C# moment
+            (arr[middle], arr[first]) = (arr[first], arr[middle]);
+
+            (arr[first], arr[last]) = (arr[last], arr[first]);
+
+            (arr[middle], arr[last]) = (arr[last], arr[middle]);
+
+            float pivot = arr[middle];
+            arr[middle] = arr[first];
             arr[first] = pivot;
             int leftMark = first + 1;
             int rightMark = last;
 
-            while (true)
+            //using this as the while condition is better than using while true
+            while (leftMark <= rightMark)
             {
+
                 while (leftMark <= rightMark && arr[leftMark] <= pivot)
                 {
                     leftMark++;
@@ -150,19 +176,13 @@ namespace Problem
                     rightMark--;
                 }
 
-                if (rightMark < leftMark)
+                if (leftMark <= rightMark)
                 {
-                    break;
-                }
-                else
-                {
-                    float temp1 = arr[leftMark];
-                    arr[leftMark] = arr[rightMark];
-                    arr[rightMark] = temp1;
+                    (arr[rightMark], arr[leftMark]) = (arr[leftMark], arr[rightMark]);
                 }
             }
 
-            
+            (arr[first], arr[rightMark]) = (arr[rightMark], arr[first]);
 
             return rightMark;
         }
