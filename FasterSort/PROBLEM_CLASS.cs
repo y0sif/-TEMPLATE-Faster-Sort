@@ -169,18 +169,21 @@ namespace Problem
 
         static private void InsertionSort(float[] arr)
         {
-            float temp;
-            for (int i = 0; i < arr.Length; i++)
+            float key;
+            int j;
+            int len = arr.Length - 1;
+            for (int i = 1; i <= len; i++)
             {
-                for (int j = i; j < arr.Length; j++)
+                key = arr[i];
+                j = i - 1;
+
+                while (j >= 0 && arr[j] > key)
                 {
-                    if (arr[i] > arr[j])
-                    {
-                        temp = arr[j];
-                        arr[j] = arr[i];
-                        arr[i] = temp;
-                    }
+                    arr[j + 1] = arr[j];
+                    j--;
                 }
+
+                arr[j + 1] = key;
             }
         }
 
