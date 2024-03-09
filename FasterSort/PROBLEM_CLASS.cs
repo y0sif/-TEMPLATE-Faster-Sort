@@ -33,14 +33,14 @@ namespace Problem
 
 
         //FINAL EVALUATION(%) = 100
-        //MAX TIME (ms) = 2223, AVG TIME (ms) = 884.6
-        //at Test Case 10: timeOutInMillisec = 4633 and threshold of 170
+        //MAX TIME (ms) = 2167, AVG TIME (ms) = 873.3
+        //at Test Case 10: timeOutInMillisec = 4638 and threshold of 170
 
         //tried all values between 16 and 120, best average is between 110 and 130 but sometimes Test case 7 fails
         //above 130 gets better average score but a lil bit worse max
         //above 190 is working well but the score gets worse bit by bit
         //no diff in performance in using more readable constant
-        private const int ParallelThreshold = 170;
+        private const int THRESHOLD = 170;
 
         /// <summary>
         /// A quicksort algorithm with parallelism and insertion sort
@@ -54,9 +54,9 @@ namespace Problem
             {
                 int split = Partition(arr, first, last);
 
-                if(last - first > ParallelThreshold)
+                if(last - first > THRESHOLD)
                 {
-                    //using this is better than Parallel.Invoke for some reason 
+                    //using this is better than Parallel.Invoke
                     var leftBranch = Task.Run(() => QuickSort(arr, first, split - 1));
                     var rightBranch = Task.Run(() => QuickSort(arr, split + 1, last));
                     Task.WaitAll(leftBranch, rightBranch);
@@ -87,7 +87,7 @@ namespace Problem
         }
 
         /// <summary>
-        /// The divide side of the quicksort algorithm
+        /// The divide side of the quicksort algorithm using median of three algorithm for picking the pivot with an adjustment to make it kinda randomized for better performance 
         /// </summary>
         /// <param name="arr"> array to be sorted in ascending order </param>
         /// <param name="first"> index of first element </param>
@@ -95,11 +95,12 @@ namespace Problem
         /// <returns> next splitting index </returns> 
         static private int Partition(float[] arr, int first, int last)
         {
-            // the use of median of three is better than the randomized and the fixed pivot at first element
-            // made the swapping without using conditions to make it some what random, also helped a lot in performance due to less array accessing
-            // making the swaps using tuples is faster than traditional swapping for some reason, C# moment
+            // after testing, the use of median of three is better than the randomized and the fixed pivot at first element
             int middle = (first + last) / 2;
-            
+
+            // the idea is that you check for the lowest between first, middle and last and make it go to the right, but that needs condition checking and array accessing or creating a variable for that access
+            // instead we can remove all of that and swap them without checking, which adds some sort of randomization, but without using Random class, which makes the algorithm so much faster
+            // making the swaps using tuples is faster than traditional swapping for some reason, C# moment
             (arr[middle], arr[first]) = (arr[first], arr[middle]);
  
             (arr[first], arr[last]) = (arr[last], arr[first]);
