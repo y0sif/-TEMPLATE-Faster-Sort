@@ -33,10 +33,14 @@ namespace Problem
 
 
         //FINAL EVALUATION(%) = 100
-        //MAX TIME (ms) = 2280, AVG TIME (ms) = 937.7
+        //MAX TIME (ms) = 2223, AVG TIME (ms) = 884.6
+        //at Test Case 10: timeOutInMillisec = 4633 and threshold of 170
 
-        //tried all values between 16 and 120, 118 is the best
-        private const int ParallelThreshold = 118;
+        //tried all values between 16 and 120, best average is between 110 and 130 but sometimes Test case 7 fails
+        //above 130 gets better average score but a lil bit worse max
+        //above 190 is working well but the score gets worse bit by bit
+        //no diff in performance in using more readable constant
+        private const int ParallelThreshold = 170;
 
         /// <summary>
         /// A quicksort algorithm with parallelism and insertion sort
@@ -52,10 +56,10 @@ namespace Problem
 
                 if(last - first > ParallelThreshold)
                 {
-                    Parallel.Invoke(
-                    () => QuickSort(arr, first, split - 1),
-                    () => QuickSort(arr, split + 1, last)
-                    );
+                    //using this is better than Parallel.Invoke for some reason 
+                    var leftBranch = Task.Run(() => QuickSort(arr, first, split - 1));
+                    var rightBranch = Task.Run(() => QuickSort(arr, split + 1, last));
+                    Task.WaitAll(leftBranch, rightBranch);
 
                 }
                 // insertion sort for smaller subarrays
@@ -108,6 +112,7 @@ namespace Problem
             int leftMark = first + 1;
             int rightMark = last;
 
+            //using this as the while condition is better than using while true
             while (leftMark <= rightMark)
             {
 
