@@ -30,13 +30,13 @@ namespace Problem
             QuickSort(arr, 0, N - 1);
             return arr;
         }
-        //28 is best with 5 out of 10
-        //30 is best with 6 out of 10
-        //46 is best with 7 out of 10
-        //70 is best with 8 out of 10
-        //80 is best with 9 out of 10
-        //105 is best with 10 out of 10
-        private const int ParallelThreshold = 105;
+
+
+        //FINAL EVALUATION(%) = 100
+        //MAX TIME (ms) = 2280, AVG TIME (ms) = 937.7
+
+        //tried all values between 16 and 120, 118 is the best
+        private const int ParallelThreshold = 118;
 
         /// <summary>
         /// A quicksort algorithm with parallelism and insertion sort
@@ -49,6 +49,7 @@ namespace Problem
             if (first < last)
             {
                 int split = Partition(arr, first, last);
+
                 if(last - first > ParallelThreshold)
                 {
                     Parallel.Invoke(
@@ -57,6 +58,7 @@ namespace Problem
                     );
 
                 }
+                // insertion sort for smaller subarrays
                 else
                 {
                     float key;
@@ -79,6 +81,7 @@ namespace Problem
 
             }
         }
+
         /// <summary>
         /// The divide side of the quicksort algorithm
         /// </summary>
@@ -86,11 +89,11 @@ namespace Problem
         /// <param name="first"> index of first element </param>
         /// <param name="last"> index of last element </param>
         /// <returns> next splitting index </returns> 
-        
         static private int Partition(float[] arr, int first, int last)
         {
             // the use of median of three is better than the randomized and the fixed pivot at first element
-            // made the swapping without using conditions to make it some what random, this help a lot in performance
+            // made the swapping without using conditions to make it some what random, also helped a lot in performance due to less array accessing
+            // making the swaps using tuples is faster than traditional swapping for some reason, C# moment
             int middle = (first + last) / 2;
             
             (arr[middle], arr[first]) = (arr[first], arr[middle]);
@@ -98,7 +101,6 @@ namespace Problem
             (arr[first], arr[last]) = (arr[last], arr[first]);
             
             (arr[middle], arr[last]) = (arr[last], arr[middle]);
-            
 
             float pivot = arr[middle];
             arr[middle] = arr[first];
