@@ -35,7 +35,8 @@ namespace Problem
         //46 is best with 7 out of 10
         //70 is best with 8 out of 10
         //80 is best with 9 out of 10
-        private const int ParallelThreshold = 80;
+        //105 is best with 10 out of 10
+        private const int ParallelThreshold = 105;
 
         /// <summary>
         /// A quicksort algorithm with parallelism and insertion sort
@@ -89,31 +90,17 @@ namespace Problem
         static private int Partition(float[] arr, int first, int last)
         {
             // the use of median of three is better than the randomized and the fixed pivot at first element
+            // made the swapping without using conditions to make it some what random, this help a lot in performance
             int middle = (first + last) / 2;
+            
+            (arr[middle], arr[first]) = (arr[first], arr[middle]);
+ 
+            (arr[first], arr[last]) = (arr[last], arr[first]);
+            
+            (arr[middle], arr[last]) = (arr[last], arr[middle]);
+            
 
-            //use these floats for less array access time
-            float f = arr[first];
-            float l = arr[last];
-            float m = arr[middle];
-
-            // use pivot for swapping rather than making temp floats
-            float pivot;
-            if (f > m)
-            {
-                (arr[middle], arr[first]) = (arr[first], arr[middle]);
-            }
-
-            if (f > l)
-            {
-                (arr[first], arr[last]) = (arr[last], arr[first]);
-            }
-
-            if (m > l)
-            {
-                (arr[middle], arr[last]) = (arr[last], arr[middle]);
-            }
-
-            pivot = arr[middle];
+            float pivot = arr[middle];
             arr[middle] = arr[first];
             arr[first] = pivot;
             int leftMark = first + 1;
@@ -138,7 +125,6 @@ namespace Problem
                 }
             }
 
-            // use pivot for swapping rather than making temp floats
             (arr[first], arr[rightMark]) = (arr[rightMark], arr[first]);
 
             return rightMark;
