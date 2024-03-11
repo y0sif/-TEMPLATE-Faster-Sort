@@ -29,7 +29,7 @@ namespace Problem
 
 
         //FINAL EVALUATION(%) = 100
-        //MAX TIME (ms) = 2167, AVG TIME (ms) = 873.3
+        //MAX TIME (ms) = 2085, AVG TIME (ms) = 832.2
         //at Test Case 10: timeOutInMillisec = 4638 and threshold of 170
 
         //tried all values between 16 and 120, best average is between 110 and 130 but sometimes Test case 7 fails
@@ -94,8 +94,7 @@ namespace Problem
             // after testing, the use of median of three is better than the randomized and the fixed pivot at first element
             int middle = (first + last) / 2;
 
-
-            // before selecting the pivot we sort the three elements, which adds shuffling but not in a random way, which makes the subarray kinda sorted and gives us a better pivot
+            // before selecting the pivot we sort the three elements, which adds shuffling but not in a random way, which gives us a better pivot
             // tried making the swapping random, but this way performs better
             if (arr[first] > arr[middle])
             {
@@ -117,7 +116,6 @@ namespace Problem
                 arr[middle] = arr[last];
                 arr[last] = temp;
             }
-
 
             float pivot = arr[middle];
             arr[middle] = arr[first];
@@ -145,7 +143,10 @@ namespace Problem
                 }
             }
 
-            (arr[first], arr[rightMark]) = (arr[rightMark], arr[first]);
+            // somehow using this swapping method is faster than using C# tuples for swapping, despite it being faster few days ago
+            float temp1 = arr[first];
+            arr[first] = arr[rightMark];
+            arr[rightMark] = temp1;
 
             return rightMark;
         }
