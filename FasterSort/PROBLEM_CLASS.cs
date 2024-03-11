@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Problem
 {
@@ -87,7 +83,7 @@ namespace Problem
         }
 
         /// <summary>
-        /// The divide side of the quicksort algorithm using median of three algorithm for picking the pivot with an adjustment to make it kinda randomized for better performance 
+        /// The divide side of the quicksort algorithm using median of three algorithm for picking the pivot with an adjustment for better performance
         /// </summary>
         /// <param name="arr"> array to be sorted in ascending order </param>
         /// <param name="first"> index of first element </param>
@@ -98,14 +94,30 @@ namespace Problem
             // after testing, the use of median of three is better than the randomized and the fixed pivot at first element
             int middle = (first + last) / 2;
 
-            // the idea is that you check for the lowest between first, middle and last and make it go to the right, but that needs condition checking and array accessing or creating a variable for that access
-            // instead we can remove all of that and swap them without checking, which adds some sort of randomization, but without using Random class, which makes the algorithm so much faster
-            // making the swaps using tuples is faster than traditional swapping for some reason, C# moment
-            (arr[middle], arr[first]) = (arr[first], arr[middle]);
- 
-            (arr[first], arr[last]) = (arr[last], arr[first]);
-            
-            (arr[middle], arr[last]) = (arr[last], arr[middle]);
+
+            // before selecting the pivot we sort the three elements, which adds shuffling but not in a random way, which makes the subarray kinda sorted and gives us a better pivot
+            // tried making the swapping random, but this way performs better
+            if (arr[first] > arr[middle])
+            {
+                float temp = arr[first];
+                arr[first] = arr[middle];
+                arr[middle] = temp;
+            }
+
+            if (arr[first] > arr[last])
+            {
+                float temp = arr[first];
+                arr[first] = arr[last];
+                arr[last] = temp;
+            }
+
+            if (arr[middle] > arr[last])
+            {
+                float temp = arr[middle];
+                arr[middle] = arr[last];
+                arr[last] = temp;
+            }
+
 
             float pivot = arr[middle];
             arr[middle] = arr[first];
